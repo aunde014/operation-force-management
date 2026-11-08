@@ -1,0 +1,563 @@
+//////////////////////////////////////////////////////
+// SAVE DATA
+//////////////////////////////////////////////////////
+
+let xp = Number(localStorage.getItem("xp")) || 0;
+let lives = Number(localStorage.getItem("lives")) || 3;
+let streak = Number(localStorage.getItem("streak")) || 0;
+let bossIndex = Number(localStorage.getItem("bossIndex")) || 0;
+
+let achievements =
+JSON.parse(
+localStorage.getItem("achievements")
+) || [];
+
+//////////////////////////////////////////////////////
+// GAME MODE
+//////////////////////////////////////////////////////
+
+let gameMode = "exam";
+
+function toggleMode(){
+
+if(gameMode==="exam"){
+gameMode="study";
+alert("Study Mode Enabled");
+}else{
+gameMode="exam";
+alert("Exam Mode Enabled");
+}
+
+}
+
+//////////////////////////////////////////////////////
+// BOSSES
+//////////////////////////////////////////////////////
+
+const bosses = [
+
+{
+id:"F110",
+name:"👹 Bureaucracy Goblin",
+hp:200
+},
+
+{
+id:"F120",
+name:"🐉 Resource Dragon",
+hp:250
+},
+
+{
+id:"F130",
+name:"🐍 Requirements Hydra",
+hp:300
+},
+
+{
+id:"F140",
+name:"🤖 Acquisition Titan",
+hp:350
+},
+
+{
+id:"F150",
+name:"👑 PPBE Overlord",
+hp:500
+}
+
+];
+
+let bossHP = Number(
+localStorage.getItem("bossHP")
+);
+
+if(!bossHP){
+bossHP = bosses[bossIndex].hp;
+}
+
+//////////////////////////////////////////////////////
+// FINAL EXAM
+//////////////////////////////////////////////////////
+
+let finalExamUnlocked =
+localStorage.getItem(
+"finalExamUnlocked"
+)==="true";
+
+//////////////////////////////////////////////////////
+// QUESTIONS
+//////////////////////////////////////////////////////
+
+let currentBoss =
+bosses[bossIndex].id;
+
+let questions =
+questionBank[currentBoss];
+
+let currentQuestion =
+Math.floor(
+Math.random()*questions.length
+);
+
+//////////////////////////////////////////////////////
+// RANKS
+//////////////////////////////////////////////////////
+
+function getRank(){
+
+if(xp < 100) return "2LT";
+if(xp < 250) return "1LT";
+if(xp < 500) return "CPT";
+if(xp < 750) return "MAJ";
+if(xp < 1000) return "LTC";
+if(xp < 1500) return "COL";
+if(xp < 2500) return "BG";
+
+return "MG";
+}
+
+//////////////////////////////////////////////////////
+// LOAD QUESTION
+//////////////////////////////////////////////////////
+
+function loadQuestion(){
+
+questions =
+questionBank[currentBoss];
+
+let q =
+questions[currentQuestion];
+
+document.getElementById(
+"question"
+).innerHTML = q.question;
+
+document.getElementById(
+"bossName"
+).innerHTML =
+bosses[bossIndex].name;
+
+let answersDiv =
+document.getElementById(
+"answers"
+);
+
+answersDiv.innerHTML="";
+
+q.answers.forEach(
+(answer,index)=>{
+
+let btn =
+document.createElement(
+"button"
+);
+
+btn.className =
+"answer";
+
+btn.innerHTML =
+answer;
+
+btn.onclick =
+()=>checkAnswer(index);
+
+answersDiv.appendChild(
+btn
+);
+
+});
+
+updateDisplay();
+
+}
+
+//////////////////////////////////////////////////////
+// ACHIEVEMENTS
+//////////////////////////////////////////////////////
+
+function unlock(name){
+
+if(
+!achievements.includes(name)
+){
+
+achievements.push(name);
+
+localStorage.setItem(
+"achievements",
+JSON.stringify(
+achievements
+)
+);
+
+renderAchievements();
+
+}
+
+}
+
+function renderAchievements(){
+
+let container =
+document.getElementById(
+"achievements"
+);
+
+if(!container) return;
+
+container.innerHTML =
+achievements.join("<br>");
+
+}
+
+//////////////////////////////////////////////////////
+// DAMAGE
+//////////////////////////////////////////////////////
+
+function showMessage(text){
+
+document.getElementById(
+"damageText"
+).innerHTML =
+text;
+
+}
+
+//////////////////////////////////////////////////////
+// CORRECT ANSWER
+//////////////////////////////////////////////////////
+
+function checkAnswer(index){
+
+let q =
+questions[currentQuestion];
+
+if(index===q.correct){
+
+let reward = 50;
+
+if(
+q.difficulty==="medium"
+){
+reward=75;
+}
+
+if(
+q.difficulty==="hard"
+){
+reward=100;
+}
+
+xp += reward;
+
+streak++;
+
+bossHP -= 25;
+
+showMessage(
+`⚔️ Correct +${reward} XP`
+);
+
+if(gameMode==="study"
+&& q.explanation){
+
+alert(q.explanation);
+
+}
+
+if(streak>=3)
+unlock("🥉 Bronze Scholar");
+
+if(streak>=5)
+unlock("🥈 Silver Scholar");
+
+if(streak>=10)
+unlock("🥇 Gold Scholar");
+
+if(xp>=500)
+unlock("⭐ Company Commander");
+
+if(xp>=1000)
+unlock("🎖️ Battalion Commander");
+
+if(bossHP<=0){
+
+defeatBoss();
+
+}
+
+}else{
+
+wrongAnswer();
+
+}
+
+saveGame();
+
+currentQuestion =
+Math.floor(
+Math.random()*questions.length
+);
+
+loadQuestion();
+
+}
+
+//////////////////////////////////////////////////////
+// WRONG ANSWER
+//////////////////////////////////////////////////////
+
+function wrongAnswer(){
+
+const attacks=[
+
+"📉 Budget Cut",
+"🚛 Supply Delay",
+"❌ Acquisition Failure",
+"📝 Congressional Oversight",
+"🔥 Capability Gap"
+
+];
+
+let attack =
+attacks[
+Math.floor(
+Math.random()*
+attacks.length
+)
+];
+
+showMessage(
+attack
+);
+
+streak = 0;
+
+lives--;
+
+if(lives<=0){
+
+alert(
+"Mission Failed!"
+);
+
+resetGame();
+
+}
+
+}
+
+//////////////////////////////////////////////////////
+// BOSS DEFEATED
+//////////////////////////////////////////////////////
+
+function defeatBoss(){
+
+unlock(
+bosses[bossIndex].name
+);
+
+xp += 100;
+
+bossIndex++;
+
+if(
+bossIndex <
+bosses.length
+){
+
+currentBoss =
+bosses[bossIndex].id;
+
+bossHP =
+bosses[bossIndex].hp;
+
+showMessage(
+"🏆 BOSS DEFEATED!"
+);
+
+}else{
+
+unlock(
+"🏅 War College Graduate"
+);
+
+finalExamMode();
+
+}
+
+}
+
+//////////////////////////////////////////////////////
+// FINAL EXAM
+//////////////////////////////////////////////////////
+
+function finalExamMode(){
+
+finalExamUnlocked =
+true;
+
+localStorage.setItem(
+"finalExamUnlocked",
+true
+);
+
+showMessage(
+"🎓 FINAL EXAM UNLOCKED"
+);
+
+questionBank.FINAL=[];
+
+Object.values(
+questionBank
+).forEach(array=>{
+
+array.forEach(q=>{
+
+questionBank.FINAL.push(q);
+
+});
+
+});
+
+currentBoss="FINAL";
+
+questions=
+questionBank.FINAL;
+
+bossHP=750;
+
+}
+
+//////////////////////////////////////////////////////
+// SAVE
+//////////////////////////////////////////////////////
+
+function saveGame(){
+
+localStorage.setItem(
+"xp",
+xp
+);
+
+localStorage.setItem(
+"lives",
+lives
+);
+
+localStorage.setItem(
+"streak",
+streak
+);
+
+localStorage.setItem(
+"bossIndex",
+bossIndex
+);
+
+localStorage.setItem(
+"bossHP",
+bossHP
+);
+
+localStorage.setItem(
+"finalExamUnlocked",
+finalExamUnlocked
+);
+
+}
+
+//////////////////////////////////////////////////////
+// DISPLAY
+//////////////////////////////////////////////////////
+
+function updateDisplay(){
+
+document.getElementById(
+"xp"
+).innerHTML = xp;
+
+document.getElementById(
+"rank"
+).innerHTML =
+getRank();
+
+document.getElementById(
+"streak"
+).innerHTML =
+streak;
+
+document.getElementById(
+"lives"
+).innerHTML =
+"♥".repeat(lives);
+
+document.getElementById(
+"bossHPText"
+).innerHTML =
+bossHP;
+
+document.getElementById(
+"bossHealth"
+).style.width =
+Math.max(
+bossHP,0
+) + "%";
+
+let xpPercent =
+Math.min(
+xp/25,
+100
+);
+
+document.getElementById(
+"xpBar"
+).style.width =
+xpPercent+"%";
+
+}
+
+//////////////////////////////////////////////////////
+// RESET
+//////////////////////////////////////////////////////
+
+function resetGame(){
+
+localStorage.clear();
+
+xp=0;
+lives=3;
+streak=0;
+
+bossIndex=0;
+
+currentBoss=
+bosses[0].id;
+
+bossHP=
+bosses[0].hp;
+
+achievements=[];
+
+renderAchievements();
+
+loadQuestion();
+
+}
+
+//////////////////////////////////////////////////////
+// START
+//////////////////////////////////////////////////////
+
+renderAchievements();
+loadQuestion();
+<div class="card">
+<h2>Achievements</h2>
+<div id="achievements">
+No Achievements Yet
+</div>
+</div>
+<button onclick="toggleMode()">
+📖 Toggle Study / Exam Mode
+</button>
