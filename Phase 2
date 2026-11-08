@@ -1,0 +1,348 @@
+const questionBank = {
+
+F110: [
+{
+question: "Continuous Transformation means iteratively adapting and evolving how the Army fights, organizes, trains, and equips.",
+answers: [
+"True",
+"False",
+"Only during war",
+"Only for modernization"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "Which transformation horizon focuses on immediate requirements within two years?",
+answers: [
+"Transformation in Contact",
+"Concept-Driven Transformation",
+"Deliberate Transformation",
+"Force Design"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "Which transformation horizon focuses on the Army of the near future?",
+answers: [
+"Transformation in Contact",
+"Deliberate Transformation",
+"Concept-Driven Transformation",
+"Future Years Defense Program"
+],
+correct: 1,
+difficulty: "easy"
+},
+{
+question: "Congress exercises which three primary authorities over the military?",
+answers: [
+"Organization, Funding, Oversight",
+"Operations, Training, Readiness",
+"Mobilization, Deployment, Sustainment",
+"Manpower, Logistics, Intelligence"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "The Army retains what type of control over units assigned to a Combatant Commander?",
+answers: [
+"OPCON",
+"TACON",
+"ADCON",
+"DIRECTSUPPORT"
+],
+correct: 2,
+difficulty: "medium"
+},
+{
+question: "Capability gaps are assessed through which framework?",
+answers: [
+"DOTMLPF-P",
+"PPBE",
+"TAA",
+"DAS"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "Scenario: A division receives emerging technology during a training rotation to solve an immediate battlefield problem. Which horizon does this represent?",
+answers: [
+"Concept-Driven Transformation",
+"Transformation in Contact",
+"Deliberate Transformation",
+"PPBE"
+],
+correct: 1,
+difficulty: "hard"
+}
+],
+
+F120: [
+{
+question: "What is the Army's current force generation model?",
+answers: [
+"ReARMM",
+"TAA",
+"DARPL",
+"ARSTRUC"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "What word describes synchronized, resource-constrained execution of approved force development plans?",
+answers: [
+"Modernization",
+"Transformation",
+"Integration",
+"Synchronization"
+],
+correct: 2,
+difficulty: "easy"
+},
+{
+question: "HQDA G-3 manages what aspect of manning?",
+answers: [
+"Faces",
+"Spaces",
+"TTHS",
+"Readiness"
+],
+correct: 1,
+difficulty: "easy"
+},
+{
+question: "HQDA G-1 manages what aspect of manning?",
+answers: [
+"Spaces",
+"Equipment",
+"Faces",
+"Requirements"
+],
+correct: 2,
+difficulty: "easy"
+},
+{
+question: "What system distributes equipment where it is needed?",
+answers: [
+"LMI DST",
+"PPBE",
+"TAA",
+"MTOE"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "Which document prioritizes units for resource allocation?",
+answers: [
+"DARPL",
+"ReARMM",
+"TAA",
+"BOIP"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "What account prevents all Army units from being filled at 100% strength?",
+answers: [
+"TDA",
+"TTHS",
+"POM",
+"FMSWEB"
+],
+correct: 1,
+difficulty: "hard"
+}
+],
+
+F130: [
+{
+question: "Which decision support system determines requirements?",
+answers: [
+"PPBE",
+"DAS",
+"JFRP",
+"MTOE"
+],
+correct: 2,
+difficulty: "easy"
+},
+{
+question: "Which system resources solutions?",
+answers: [
+"DAS",
+"PPBE",
+"JFRP",
+"TAA"
+],
+correct: 1,
+difficulty: "easy"
+},
+{
+question: "Which system develops materiel solutions?",
+answers: [
+"DAS",
+"PPBE",
+"DOTMLPF-P",
+"JROC"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "What organization identifies solutions to Joint Operational Problems?",
+answers: [
+"MEIA",
+"TAA",
+"ACMG",
+"FIFA"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "What board determines which requirements should be resourced?",
+answers: [
+"RRAB",
+"CSA Board",
+"TAA Panel",
+"GOSC"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "What are the three CBA phases?",
+answers: [
+"Need, Gap, Solution",
+"Plan, Program, Execute",
+"Train, Organize, Equip",
+"Analyze, Budget, Field"
+],
+correct: 0,
+difficulty: "hard"
+}
+],
+
+F140: [
+{
+question: "How many phases does Major Capability Acquisition contain?",
+answers: [
+"3",
+"4",
+"5",
+"6"
+],
+correct: 2,
+difficulty: "easy"
+},
+{
+question: "Middle Tier Acquisition rapidly does what?",
+answers: [
+"Prototype or Field",
+"Budget",
+"Modernize Units",
+"Train Soldiers"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "What authority permits up to $200M to address urgent needs?",
+answers: [
+"Rapid Acquisition Authority",
+"TAA Authority",
+"Emergency Funding Authority",
+"Special Access Funding"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "Who balances cost, schedule, and performance?",
+answers: [
+"Program Managers",
+"Congress",
+"CSA",
+"JROC"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "A TOE defines wartime mission, organization, personnel and equipment what?",
+answers: [
+"Requirements",
+"Budgets",
+"Needs",
+"Priorities"
+],
+correct: 0,
+difficulty: "hard"
+}
+],
+
+F150: [
+{
+question: "What application provides an interface for requirement and authorization documents?",
+answers: [
+"FMSWEB",
+"DARPL",
+"TAA",
+"BOIP"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "Colors of money are known as what?",
+answers: [
+"Appropriations",
+"MDEPs",
+"Programs",
+"POM"
+],
+correct: 0,
+difficulty: "easy"
+},
+{
+question: "Who oversees the Army PPBE process?",
+answers: [
+"ASA(FM&C)",
+"CSA",
+"SecArmy",
+"G-8"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "What does TAA stand for?",
+answers: [
+"Total Army Analysis",
+"Training Assessment Authority",
+"Tactical Army Allocation",
+"Transformation Assessment Activity"
+],
+correct: 0,
+difficulty: "medium"
+},
+{
+question: "What is the Army's five-year PPBE submission called?",
+answers: [
+"POM/BES",
+"MDEP",
+"MTOE",
+"FMSWEB"
+],
+correct: 0,
+difficulty: "hard"
+}
+]
+
+};
