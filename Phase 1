@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Operation Force Management</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#121212;
+    color:white;
+}
+
+header{
+    background:#2f4f2f;
+    padding:20px;
+    text-align:center;
+    border-bottom:3px solid gold;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:#222;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.stat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+
+.stat{
+    background:#333;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.health-container{
+    background:#444;
+    border-radius:50px;
+    overflow:hidden;
+    height:25px;
+}
+
+.health-bar{
+    height:100%;
+    background:red;
+    width:100%;
+    transition:.5s;
+}
+
+.xp-bar{
+    height:100%;
+    background:gold;
+    width:0%;
+    transition:.5s;
+}
+
+.map{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:15px;
+}
+
+.boss{
+    background:#303030;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    border:2px solid #555;
+}
+
+.active-boss{
+    border:2px solid gold;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    font-size:16px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.answer{
+    background:#444;
+    color:white;
+}
+
+.answer:hover{
+    background:#5a5a5a;
+}
+
+.next{
+    background:green;
+    color:white;
+}
+
+.damage{
+    color:#ff6060;
+    font-size:28px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.unlock{
+    color:gold;
+    text-align:center;
+    font-size:22px;
+}
+
+.hidden{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🛡️ OPERATION FORCE MANAGEMENT</h1>
+<p>CGSOC Force Management Campaign</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<div class="stat-grid">
+
+<div class="stat">
+<h3>Rank</h3>
+<div id="rank">MAJ</div>
+</div>
+
+<div class="stat">
+<h3>XP</h3>
+<div id="xp">0</div>
+</div>
+
+<div class="stat">
+<h3>Lives</h3>
+<div id="lives">♥♥♥</div>
+</div>
+
+<div class="stat">
+<h3>Streak</h3>
+<div id="streak">0</div>
+</div>
+
+</div>
+
+<br>
+
+<div class="health-container">
+<div class="xp-bar" id="xpBar"></div>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Campaign Map</h2>
+
+<div class="map">
+
+<div class="boss active-boss">
+👹<br>F110<br>Bureaucracy Goblin
+</div>
+
+<div class="boss">
+🐉<br>F120<br>Resource Dragon
+</div>
+
+<div class="boss">
+🐍<br>F130<br>Requirements Hydra
+</div>
+
+<div class="boss">
+🤖<br>F140<br>Acquisition Titan
+</div>
+
+<div class="boss">
+👑<br>F150<br>PPBE Overlord
+</div>
+
+</div>
+</div>
+
+<div class="card">
+
+<h2 id="bossName">👹 Bureaucracy Goblin</h2>
+
+<h3>Boss Health</h3>
+
+<div class="health-container">
+<div class="health-bar" id="bossHealth"></div>
+</div>
+
+<p id="bossHPText">100 / 100</p>
+
+<div id="damageText"></div>
+
+</div>
+
+<div class="card">
+
+<h2 id="question"></h2>
+
+<div id="answers"></div>
+
+</div>
+
+<div class="card">
+<button class="next" onclick="resetGame()">
+🔄 Reset Campaign
+</button>
+</div>
+
+</div>
+
+<script>
+
+let xp = Number(localStorage.getItem('xp')) || 0;
+let lives = Number(localStorage.getItem('lives')) || 3;
+let streak = Number(localStorage.getItem('streak')) || 0;
+
+let bossHP = Number(localStorage.getItem('bossHP')) || 100;
+
+const questions = [
+
+{
+question:"Which Continuous Transformation horizon focuses on immediate requirements?",
+answers:[
+"Transformation in Contact",
+"Deliberate Transformation",
+"Concept-Driven Transformation",
+"Capability Portfolio Management"
+],
+correct:0
+},
+
+{
+question:"Congress has three primary military roles.",
+answers:[
+"Funding, Organizing, Oversight",
+"Training, Manning, Readiness",
+"Command, Control, Sustainment",
+"Operations, Logistics, Acquisitions"
+],
+correct:0
+},
+
+{
+question:"Current Army force generation model?",
+answers:[
+"ReARMM",
+"PPBE",
+"TAA",
+"TOE"
+],
+correct:0
+},
+
+{
+question:"What does DOTMLPF-P stand for framework analysis?",
+answers:[
+"Capability Domains",
+"Force Development Framework",
+"Gap Solution Framework",
+"Readiness Model"
+],
+correct:0
+},
+
+{
+question:"Which document is resource informed and derived from a TOE?",
+answers:[
+"MTOE",
+"TDA",
+"BOIP",
+"URS"
+],
+correct:0
+}
+
+];
+
+let currentQuestion = Math.floor(Math.random()*questions.length);
+
+function loadQuestion(){
+
+let q=questions[currentQuestion];
+
+document.getElementById("question").innerHTML=q.question;
+
+let answersDiv=document.getElementById("answers");
+
+answersDiv.innerHTML="";
+
+q.answers.forEach((answer,index)=>{
+
+let btn=document.createElement("button");
+
+btn.className="answer";
+
+btn.innerHTML=answer;
+
+btn.onclick=()=>checkAnswer(index);
+
+answersDiv.appendChild(btn);
+
+});
+
+updateDisplay();
+
+}
+
+function checkAnswer(index){
+
+let q=questions[currentQuestion];
+
+if(index===q.correct){
+
+streak++;
+
+xp+=50;
+
+bossHP-=25;
+
+showDamage("⚔️ Critical Hit! -25 HP");
+
+if(bossHP<=0){
+
+bossHP=100;
+
+xp+=100;
+
+showDamage("🏆 Boss Defeated! +100 XP");
+
+}
+
+}else{
+
+lives--;
+
+streak=0;
+
+showDamage("❌ Enemy Counterattack!");
+
+if(lives<=0){
+
+alert("Mission Failed. Campaign reset.");
+
+resetGame();
+
+return;
+
+}
+
+}
+
+saveData();
+
+currentQuestion=Math.floor(Math.random()*questions.length);
+
+loadQuestion();
+
+}
+
+function showDamage(text){
+
+document.getElementById("damageText").innerHTML=text;
+
+}
+
+function updateDisplay(){
+
+document.getElementById("xp").innerHTML=xp;
+
+document.getElementById("lives").innerHTML="♥".repeat(lives);
+
+document.getElementById("streak").innerHTML=streak;
+
+document.getElementById("bossHPText").innerHTML=
+bossHP+" / 100";
+
+document.getElementById("bossHealth").style.width=
+bossHP+"%";
+
+let rank="MAJ";
+
+if(xp>100) rank="LTC";
+if(xp>250) rank="COL";
+if(xp>500) rank="BG";
+if(xp>1000) rank="MG";
+
+document.getElementById("rank").innerHTML=rank;
+
+document.getElementById("xpBar").style.width=
+Math.min(xp/10,100)+"%";
+
+}
+
+function saveData(){
+
+localStorage.setItem("xp",xp);
+
+localStorage.setItem("lives",lives);
+
+localStorage.setItem("streak",streak);
+
+localStorage.setItem("bossHP",bossHP);
+
+}
+
+function resetGame(){
+
+xp=0;
+lives=3;
+streak=0;
+bossHP=100;
+
+saveData();
+
+loadQuestion();
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
